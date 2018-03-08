@@ -9,9 +9,8 @@ cpn=16
 nodes = [[1,complexity.to_i/80000].max,25].min
 number_of_processors cpn*nodes
 
-mpirun_command "pbswrap -cpn #{cpn} -t 12 -q K3-route -b -e '. ~/mod-mpt-intel.sh'"
+mpirun_command "pbswrap -cpn #{cpn} -t 12 -q K3-route -b -e '. ~/.bashrc'"
 
-rad_nl["adapt_complexity"] = complexity
 
 first_iteration 1
 last_iteration 50
@@ -24,7 +23,7 @@ def iteration_steps
   sh("cp #{project(1)}.meshb Flow")
   sh("cp #{project(1)}.mapbc Flow/#{project}.mapbc")
   sh("ref_translate Flow/#{project}.meshb Flow/#{project}.b8.ugrid")
-  sh("(cd Flow && ../../wall-distance.sh #{project}.b8.ugrid)")
+  sh("(cd Flow && ../wall-distance.sh #{project}.b8.ugrid)")
   flo({"distance_from_file" => "'#{project}.dist'"})
   sh("(cd Flow && ~/refine/egads/src/ref_metric_test --lp #{project}.meshb #{project}_volume.solb 2 1.5 #{rad_nl["adapt_complexity"]} #{project}-metric.solb )")
   if ( iteration > 1 ) then
