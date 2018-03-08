@@ -25,10 +25,10 @@ def iteration_steps
   sh("ref_translate Flow/#{project}.meshb Flow/#{project}.b8.ugrid")
   sh("(cd Flow && ../wall-distance.sh #{project}.b8.ugrid)")
   flo({"distance_from_file" => "'#{project}.dist'"})
-  sh("(cd Flow && ~/refine/egads/src/ref_metric_test --lp #{project}.meshb #{project}_volume.solb 2 1.5 #{rad_nl["adapt_complexity"]} #{project}-metric.solb )")
+  sh("(cd Flow && ~/softs/refine/parmetis/src/ref_metric_test --lp #{project}.meshb #{project}_volume.solb 2 1.5 #{rad_nl["adapt_complexity"]} #{project}-metric.solb )")
   if ( iteration > 1 ) then
-    sh("(cd Flow && #{mpirun_command} -e '. ~/mod-mpich-gcc.sh' -np #{number_of_processors} ~/refine/zoltan/src/ref_driver -i #{project}.meshb -m #{project}-metric.solb -g ../#{project(1)}.egads -o #{project(@iteration+1)} < /dev/null | tee refine_out > #{project}_refine_out)")
+    sh("(cd Flow && #{mpirun_command} -e '. ~/.bashrc' -np #{number_of_processors} ref_driver -i #{project}.meshb -m #{project}-metric.solb -g ../#{project(1)}.egads -o #{project(@iteration+1)} < /dev/null | tee refine_out > #{project}_refine_out)")
   else
-    sh("(cd Flow && #{mpirun_command} -e '. ~/mod-mpich-gcc.sh' -np #{1} ~/refine/zoltan/src/ref_driver -i #{project}.meshb -m #{project}-metric.solb -g ../#{project(1)}.egads -o #{project(@iteration+1)} < /dev/null | tee refine_out > #{project}_refine_out)")
+    sh("(cd Flow && #{mpirun_command} -e '. ~/.bashrc' -np #{1} ref_driver -i #{project}.meshb -m #{project}-metric.solb -g ../#{project(1)}.egads -o #{project(@iteration+1)} < /dev/null | tee refine_out > #{project}_refine_out)")
   end
 end
