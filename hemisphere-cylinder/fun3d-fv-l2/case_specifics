@@ -1,0 +1,26 @@
+
+root_project 'hsc'
+
+number_of_processors 12
+
+mpirun_command 'pbswrap -cpn 12 -t 12 -q K2a-route -b '
+
+steps_per_complexity = 5
+complexity = [50.0e3*(iteration/steps_per_complexity),50.0e3].max
+
+rad_nl["adapt_complexity"] = complexity
+
+first_iteration 1
+last_iteration 50
+
+def iteration_steps
+  system("cp #{project(1)}.meshb Flow")
+  system("ref_translate Flow/#{project}.meshb Flow/#{project}.b8.ugrid")
+  system("(cd Flow && ../../wall-distance.sh #{project}.b8.ugrid)")
+  flo({"distance_from_file" => "'#{project}.dist'"})
+  adapt({"distance_from_file" => "'#{project}.dist'"})
+  system("rm -f Flow/#{project(iteration+1)}.flow") # adapt will change grid size
+  system("mv Flow/#{project(@iteration+1)}.b8.ugrid Flow/#{project(@iteration+1)}-no-geom.b8.ugrid ")
+  system("mv Flow/#{project(@iteration+1)}.lb8.ugrid Flow/#{project(@iteration+1)}-no-geom.lb8.ugrid ")
+  system("(cd Flow && ~/refine/egads/src/ref_driver -i #{project}.meshb -m #{project}.metric -g ../#{project(1)}.egads -o #{project(@iteration+1)})")
+end

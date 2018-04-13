@@ -1,0 +1,80 @@
+&project
+  project_rootname = 'hsc01'
+/
+&special_parameters
+  distance_from_file = 'hsc01.dist'
+/
+&raw_grid
+  grid_format = 'aflr3' 
+  data_format = 'stream'
+/
+&force_moment_integ_properties
+  area_reference  =  5.0
+  x_moment_length = 10.0
+  y_moment_length =  0.5
+/
+&reference_physical_properties
+  mach_number       = 0.6
+  angle_of_attack   = 0.0
+  reynolds_number   = 350000.0
+  temperature       = 300.0
+/
+&nonlinear_solver_parameters
+  schedule_iteration =  1     50
+  schedule_cfl       = 1.0 10.0
+  schedule_cflturb   = 1.0 5.0
+/
+&code_run_control
+  steps              = 20000
+  stopping_tolerance = 1.0e-14
+  restart_read       = 'off'
+/
+
+&global
+  boundary_animation_freq=-1
+  volume_animation_freq=-1
+/
+
+&boundary_output_variables
+  number_of_boundaries = -1 ! compute from following list
+  boundary_list        = '2-3,4-5'
+  mach    = .true.
+  cp      = .true.
+  mu_t    = .true.
+  res1    = .true.
+  turres1 = .true.
+  yplus   = .true.
+  cf_x    = .true.
+  cf_y    = .true.
+  cf_z    = .true.
+  slen    = .true.
+/
+&volume_output_variables
+ export_to = 'sol'
+ primitive_variables = .false.
+ x = .false.
+ y = .false.
+ z = .false.
+ mach = .true.
+/
+
+&adapt_mechanics
+ adapt_library = 'refine/two'
+ adapt_project = 'hsc02'
+/
+
+&adapt_metric_construction
+  adapt_hessian_key = 'mach'
+  adapt_feature_scalar_form = 'none'
+  adapt_feature_length_exp = 2.0 ! Lp norm power
+  adapt_hessian_method = 'grad'
+  adapt_hessian_average_on_bound = .true.
+  adapt_debug = .true.
+  adapt_statistics = 'average'
+!  adapt_max_anisotropy = 1000.0
+  adapt_complexity = 10000
+  adapt_gradation  = 1.5
+  adapt_current_h_method = 'implied'
+  adapt_export_metric = .true.
+/
+
