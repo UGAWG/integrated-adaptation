@@ -1,0 +1,18 @@
+
+root_project 'delta'
+
+number_of_processors 8
+
+flo_nl['hanim']='.true.'
+
+adj_cl " --outer_loop_krylov "
+adj_nl['steps']=500
+
+rad_nl["adapt_complexity"] =  10000
+rad_nl["adapt_complexity"] =  20000 if ( iteration > 10)
+rad_nl["adapt_complexity"] =  40000 if ( iteration > 20)
+rad_nl["adapt_complexity"] =  80000 if ( iteration > 30)
+
+first_iteration 1
+last_iteration 40
+
