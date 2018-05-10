@@ -1,18 +1,30 @@
 
 root_project 'delta'
 
-number_of_processors 8
+steps_per_complexity = 10
+complexity = 6.25e3*2**(iteration/steps_per_complexity)
+complexity = [complexity, 50.0e5].min
+rad_nl["adapt_complexity"] = complexity
 
-flo_nl['hanim']='.true.'
-
-adj_cl " --outer_loop_krylov "
-adj_nl['steps']=500
-
-rad_nl["adapt_complexity"] =  10000
-rad_nl["adapt_complexity"] =  20000 if ( iteration > 10)
-rad_nl["adapt_complexity"] =  40000 if ( iteration > 20)
-rad_nl["adapt_complexity"] =  80000 if ( iteration > 30)
+nodes = [[1,complexity.to_i/3000].max,56].min
+number_of_processors nodes
 
 first_iteration 1
-last_iteration 40
+last_iteration 60
 
+def iteration_steps
+  def sh(comm)
+    puts comm
+    system(comm)
+  end
+  sh("cp #{project(1)}.meshb Flow")
+  sh("cp #{project(1)}.mapbc Flow/#{project}.mapbc")
+  sh("ref_translate Flow/#{project}.meshb Flow/#{project}.b8.ugrid")
+  flo()
+  sh("(cd Flow && ~/refine/strict/src/ref_metric_test --lp #{project}.meshb #{project}_volume.solb 2 1.5 #{rad_nl["adapt_complexity"]} #{project}-metric.solb --kexact )")
+  if ( iteration > 1 ) then
+    sh("(cd Flow && #{mpirun_command} -np #{number_of_processors} ~/refine/zoltan/src/ref_driver -i #{project}.meshb -m #{project}-metric.solb -o #{project(@iteration+1)} < /dev/null | tee refine_out > #{project}_refine_out)")
+  else
+    sh("(cd Flow && ~/refine/strict/src/ref_driver -i #{project}.meshb -m #{project}-metric.solb -o #{project(@iteration+1)} < /dev/null | tee refine_out > #{project}_refine_out)")
+  end
+end
