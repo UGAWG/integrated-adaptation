@@ -17,18 +17,14 @@
   reynolds_number   = 4000
 /
 &code_run_control
-  steps              = 1000
+  steps              = 10000
   stopping_tolerance = 1.0e-12
   restart_read       = 'off'
-/
-&linear_solver_parameters
-  linear_projection = .true.
 /
 
 &global
   boundary_animation_freq=-1
   volume_animation_freq=-1
-  hanim=.false.
 /
 
 &boundary_output_variables
@@ -36,21 +32,15 @@
   boundary_list        = '1-10'
   mach=.true.
   cp=.true.
-  lambda1=.true.
-  lambda2=.true.
-  lambda3=.false.
-  lambda4=.true.
-  lambda5=.true.
+
 /
 &volume_output_variables
-  export_to='tec'
-  mach=.true.
-  cp=.true.
-  lambda1=.true.
-  lambda2=.true.
-  lambda3=.false.
-  lambda4=.true.
-  lambda5=.true.
+ export_to='solb'
+ primitive_variables = .false.
+ x = .false.
+ y = .false.
+ z = .false.
+ mach = .true.
 /
 &sampling_output_variables
 mach=.true.
@@ -78,22 +68,3 @@ type_of_geometry(5) = 'isosurface'
 isosurf_variable(5) = 'mach'
 isosurf_value(5) = 0.2
 /
-
-&adapt_mechanics
- adapt_library = 'refine/two'
- adapt_project = 'delta02'
-/
-
-&adapt_metric_construction
-!  adapt_error_estimation = 'opt-goal'
-  adapt_hessian_method = 'grad'
-  adapt_hessian_average_on_bound = .true.
-  adapt_debug = .true.
-  adapt_statistics = 'average'
-!  adapt_max_anisotropy = 10.0
-  adapt_complexity = 10000
-  adapt_gradation  = 1.5
-  adapt_current_h_method = 'implied'
-  adapt_export_metric = .true.
-/
-
