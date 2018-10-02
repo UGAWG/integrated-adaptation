@@ -9,6 +9,7 @@
   area_reference = 0.133974596
 /
 &governing_equations
+sfe_flag =.true.
   viscous_terms = 'laminar'
 /
 &reference_physical_properties
