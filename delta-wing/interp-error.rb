@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-t=28
+t=37
 root='Flow/delta'
 norm=2
 
