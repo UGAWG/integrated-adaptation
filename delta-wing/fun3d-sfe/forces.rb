@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+puts 'VARIABLES="Iter"     "DOF"     "C<sub>L</sub>"     "C<sub>D</sub>"     "C<sub>M</sub>"          "Estimate"         "Indicator"'
+puts 'ZONE T="FUN3D-FE Multiscale Mach"'
 cycs = Dir['Flow/delta*_flow_out'].sort
 cycs.each do |cyc|
   i = cyc.gsub(/\D/,'').to_i
