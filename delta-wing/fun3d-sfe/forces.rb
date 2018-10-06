@@ -2,6 +2,7 @@
 
 cycs = Dir['Flow/delta*_flow_out'].sort
 cycs.each do |cyc|
+  i = cyc.gsub(/\D/,'').to_i
   forces = `grep Forces #{cyc} | tail -1`
   cx = forces.split[6].to_f
   cy = forces.split[7].to_f
@@ -14,5 +15,5 @@ cycs.each do |cyc|
   cl = lift/sref
   cd = drag/sref
   n = `grep nnodesg #{cyc}`.split[2].to_i
-  puts "#{n} #{cl} #{cd}"
+  puts "#{i-1} #{n} #{cl} #{cd} 0 0 0"
 end
