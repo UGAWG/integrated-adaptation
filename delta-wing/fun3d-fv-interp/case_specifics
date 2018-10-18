@@ -10,7 +10,7 @@ number_of_processors nodes
 number_of_processors 2
 
 first_iteration 1
-last_iteration 60
+last_iteration 5
 
 def iteration_steps
   def sh(comm)
