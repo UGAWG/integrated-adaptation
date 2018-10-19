@@ -36,15 +36,13 @@ sfe_flag =.true.
   boundary_list        = '1-10'
   mach=.true.
   cp=.true.
-
 /
 &volume_output_variables
  export_to='solb'
- primitive_variables = .true.     .
+ primitive_variables = .true.
  x = .false.
  y = .false.
  z = .false.
- mach = .false.
  turb1 =  .true.
 /
 &sampling_output_variables
