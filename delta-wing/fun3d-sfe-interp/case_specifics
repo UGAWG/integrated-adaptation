@@ -2,7 +2,7 @@
 root_project 'delta'
 
 steps_per_complexity = 5
-complexity = 1e3*2**(iteration/steps_per_complexity)
+complexity = 6.25e3*2**(iteration/steps_per_complexity)
 rad_nl["adapt_complexity"] = complexity
 
 # parameters for the pbs queue

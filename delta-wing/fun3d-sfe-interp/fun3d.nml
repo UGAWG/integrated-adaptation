@@ -43,7 +43,6 @@ sfe_flag =.true.
  x = .false.
  y = .false.
  z = .false.
- turb1 =  .true.
 /
 &sampling_output_variables
 mach=.true.
