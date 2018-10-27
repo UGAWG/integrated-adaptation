@@ -6,8 +6,8 @@ complexity = 1e3*2**(iteration/steps_per_complexity)
 rad_nl["adapt_complexity"] = complexity
 
 # parameters for the pbs queue
-queue_node_limit  = 10
-cores_per_node    = 40
+queue_node_limit  = 25
+cores_per_node    = 16
 # strong scaling target of verticies per core
 vertices_per_core = 10000
 vertex_estimate   = 2*complexity.to_i
@@ -15,10 +15,9 @@ cores_desired = vertex_estimate/vertices_per_core
 nodes_desired = (cores_desired/cores_per_node.to_f).ceil # round up
 nodes_requested = [nodes_desired,queue_node_limit].min
 number_of_processors cores_per_node*nodes_requested
-number_of_processors 14
 
 # use pbswarp distributed with FUN3D to launch pbs jobs
-!mpirun_command "pbswrap -cpn #{cores_per_node} -t 12 -q K4-route -b -e '. ~/.profile'"
+mpirun_command "pbswrap -cpn #{cores_per_node} -t 12 -q K3-route -b -e '. ~/.profile'"
 
 first_iteration 1
 last_iteration 60
@@ -37,7 +36,7 @@ def iteration_steps
     flo({"import_from" => "'#{project}-restart.solb'"})
   end
   sh("(cd Flow && ~/refine/strict/src/ref_interp_test --mach #{project}.meshb #{project}_volume.solb #{project}-mach.solb  )")
-  sh("(cd Flow && ~/refine/strict/src/ref_metric_test --lp #{project}.meshb #{project}-mach.solb 2 5.0 #{rad_nl["adapt_complexity"]} #{project}-metric.solb --kexact )")
+  sh("(cd Flow && ~/refine/strict/src/ref_metric_test --lp #{project}.meshb #{project}-mach.solb 4 5.0 #{rad_nl["adapt_complexity"]} #{project}-metric.solb --kexact )")
   if ( iteration > 1 ) then
     sh("(cd Flow && #{mpirun_command} -np #{number_of_processors} ~/refine/zoltan/src/ref_driver -i #{project}.meshb -m #{project}-metric.solb -o #{project(@iteration+1)} < /dev/null | tee refine_out > #{project}_refine_out)")
   else
