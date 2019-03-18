@@ -1,0 +1,26 @@
+
+box -10 0 -10 20 1 20
+
+skbeg     0   0   0   1
+   skvar     xy   -0.005000;0.000000;0.000000;0.495000;-0.030000;0.000000;0.995000;0.000000;0.000000;0.495000;0.040000;0.000000;
+   skcon     X   1   -1  0
+   skcon     Y   1   -1  0
+   skcon     X   3   -1  1
+   skcon     Y   3   -1  0
+   skcon     X   2   -1  0.5
+   skcon     Y   2   -1  -0.035
+   skcon     X   4   -1  0.5
+   skcon     Y   4   -1  0.035
+   linseg    ::x[2]   ::y[2]   0
+   linseg    ::x[3]   ::y[3]   0
+   linseg    ::x[4]   ::y[4]   0
+   linseg    ::x[1]   ::y[1]   0
+skend     0
+rotatex   90   0   0
+extrude   0   1   0
+
+subtract
+
+dump diamond.egads
+
+end
