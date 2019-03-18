@@ -1,0 +1,62 @@
+
+root_project 'diamond'
+refine_directory "~/refine/parmetis/src/"
+
+steps_per_complexity = 10
+complexity = 10000*(iteration/steps_per_complexity+1)
+rad_nl["adapt_complexity"] = complexity
+
+nodes = [[1,complexity.to_i/3000].max,28].min
+number_of_processors nodes
+
+first_iteration 1
+last_iteration 40
+
+def iteration_steps
+  if ( 1 == iteration ) then
+    sh("cp #{project}.meshb Flow")
+    sh("ref_translate Flow/#{project}.meshb Flow/#{project}.b8.ugrid")
+  end
+  sh("cp #{project(1)}.mapbc Flow/#{project}.mapbc")
+  if ( 1 == iteration ) then
+    flo()
+  else
+    flo({"import_from" => "'#{project}-restart.solb'"})
+  end
+  expect_file("Flow/#{project}_volume.solb")
+  adj()
+  expect_file("Adjoint/#{project}_volume.solb")
+
+  ref("ref_phys_test --mask "+
+      "#{project}.meshb "+
+      "#{project}.mapbc "+
+      "../Adjoint/#{project}_volume.solb "+
+      "#{project}-prim-adj.solb")
+  ref("ref_phys_test --euler-flux "+
+      "#{project}.meshb "+
+      "#{project}-prim-adj.solb "+
+      "#{project}-adj-flux.solb")
+  ref("ref_metric_test --opt-goal "+
+      "#{project}.meshb "+
+      "#{project}-adj-flux.solb "+
+      "1 -1.0 "+
+      "#{rad_nl['adapt_complexity']} "+
+      "#{project}-metric.solb")
+  ref("ref_driver -i #{project}.meshb -m #{project}-metric.solb "+
+      "-g ../#{@root_project}.egads "+
+      "-x #{project(@iteration+1)}.meshb "+
+      "-x #{project(@iteration+1)}.b8.ugrid",
+      "refine_out")
+  ref("ref_interp_test --field #{project}.meshb #{project}_volume.solb "+
+      "#{project(@iteration+1)}.meshb #{project(@iteration+1)}-restart.solb")
+  if (false) then
+    if (0 != (@iteration % 5)) then
+      %w[ .b8.ugrid -distance.solb .flow .grid_info -mach.solb .mapbc .meshb -metric.solb -restart.solb _volume.solb -adj-flux.solb -prim-adj.solb].each do |suffix|
+        sh("rm -f Flow/#{project}#{suffix}")
+      end
+      %w[.adjoint _volume.solb].each do |suffix|
+        sh("rm -f Adjoint/#{project}#{suffix}")
+      end
+    end
+  end
+end

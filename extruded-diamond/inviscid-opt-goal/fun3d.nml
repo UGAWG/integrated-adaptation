@@ -1,0 +1,54 @@
+&project
+  project_rootname = 'diamond01'
+/
+&raw_grid
+  grid_format = 'aflr3' 
+  data_format = 'stream'
+/
+&governing_equations
+  viscous_terms = 'inviscid'
+/
+&reference_physical_properties
+  mach_number       = 2.0
+  angle_of_attack   = 0.0
+/
+&inviscid_flux_method
+  kappa_umuscl = 0
+  flux_limiter = 'hvanalbada'
+  freeze_limiter_iteration = 100
+  flux_construction      = 'vanleer'
+/
+&nonlinear_solver_parameters
+  schedule_iteration =  1     50
+  schedule_cfl       = 1.0 100.0
+/
+&code_run_control
+  steps              = 500
+  stopping_tolerance = 1.0e-11
+  restart_read       = 'off'
+/
+&global
+  boundary_animation_freq=-1
+  volume_animation_freq=-1
+/
+
+&boundary_output_variables
+  number_of_boundaries = -1 ! compute from following list
+  boundary_list        = '1-10'
+  mach=.true.
+  cp=.true.
+  lambda1=.true.
+  lambda2=.true.
+  lambda3=.true.
+  lambda4=.true.
+  lambda5=.true.
+/
+
+&volume_output_variables
+ export_to='solb'
+ primitive_variables = .true.
+ x = .false.
+ y = .false.
+ z = .false.
+/
+
