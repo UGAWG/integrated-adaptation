@@ -1,0 +1,33 @@
+
+root_project 'extrude-n12-'
+
+steps_per_complexity = 5
+complexity = 5000*2**(iteration/steps_per_complexity)
+rad_nl["adapt_complexity"] = complexity
+
+nodes = [[1,complexity.to_i/3000].max,28].min
+number_of_processors nodes
+#number_of_processors 2
+
+first_iteration 1
+last_iteration 60
+
+def iteration_steps
+  def sh(comm)
+    puts comm
+    system(comm)
+  end
+  sh("cp #{project(1)}.meshb Flow")
+  sh("cp #{project(1)}.mapbc Flow/#{project}.mapbc")
+  sh("ref_translate Flow/#{project}.meshb Flow/#{project}.b8.ugrid")
+  if ( 1 == iteration ) then
+    flo()
+  else
+    flo({"import_from" => "'#{project}-restart.solb'"})
+  end
+  adj()
+  sh("(cd Flow && ref_interp_test --mach #{project}.meshb #{project}_volume.solb #{project}-mach.solb  )")
+  sh("(cd Flow && ref_metric_test --lp #{project}.meshb #{project}-mach.solb 2 -1 #{rad_nl["adapt_complexity"]} #{project}-metric.solb )")
+  sh("(cd Flow &&  #{mpirun_command} -np #{number_of_processors} ~/refine/zoltan/src/ref_driver -i #{project}.meshb -g ../../geom/extrude-n12.egads -m #{project}-metric.solb -o #{project(@iteration+1)} < /dev/null | tee refine_out > #{project}_refine_out)")
+  sh("(cd Flow && ref_interp_test --field #{project}.meshb #{project}_volume.solb #{project(@iteration+1)}.meshb #{project(@iteration+1)}-restart.solb  )")
+end
