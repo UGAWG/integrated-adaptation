@@ -36,11 +36,11 @@
 /
 &volume_output_variables
  export_to='solb'
- primitive_variables = .false.
+ primitive_variables = .true.
  x = .false.
  y = .false.
  z = .false.
- mach = .true.
+ mach = .false.
 /
 &sampling_output_variables
 mach=.true.

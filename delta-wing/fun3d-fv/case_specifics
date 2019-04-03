@@ -2,11 +2,12 @@
 root_project 'delta'
 
 steps_per_complexity = 5
-complexity = 6.25e3*2**(iteration/steps_per_complexity)
+complexity = 100*2**(iteration/steps_per_complexity)
 rad_nl["adapt_complexity"] = complexity
 
 nodes = [[1,complexity.to_i/3000].max,28].min
 number_of_processors nodes
+number_of_processors 2
 
 first_iteration 1
 last_iteration 60
@@ -20,7 +21,8 @@ def iteration_steps
   sh("cp #{project(1)}.mapbc Flow/#{project}.mapbc")
   sh("ref_translate Flow/#{project}.meshb Flow/#{project}.b8.ugrid")
   flo()
-  sh("(cd Flow && ~/refine/strict/src/ref_metric_test --lp #{project}.meshb #{project}_volume.solb 2 5.0 #{rad_nl["adapt_complexity"]} #{project}-metric.solb --kexact )")
+  sh("(cd Flow && ~/refine/strict/src/ref_interp_test --mach #{project}.meshb #{project}_volume.solb #{project}-mach.solb  )")
+  sh("(cd Flow && ~/refine/strict/src/ref_metric_test --lp #{project}.meshb #{project}-mach.solb 2 5.0 #{rad_nl["adapt_complexity"]} #{project}-metric.solb --kexact )")
   if ( iteration > 1 ) then
     sh("(cd Flow && #{mpirun_command} -np #{number_of_processors} ~/refine/zoltan/src/ref_driver -i #{project}.meshb -m #{project}-metric.solb -o #{project(@iteration+1)} < /dev/null | tee refine_out > #{project}_refine_out)")
   else

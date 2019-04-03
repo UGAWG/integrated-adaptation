@@ -1,0 +1,9 @@
+cylinder  0   0   0   0   1   0   10
+udprim    naca   sharpte   1
+rotatex   90   0   0
+extrude   0   1   0
+subtract
+
+dump extrude-n12.egads
+
+end
