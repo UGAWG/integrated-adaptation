@@ -1,0 +1,7 @@
+6
+1 5000 inflow
+2 6662 y=1
+3 5000 outflow
+4 6662 y=0
+5 4000 lower
+6 4000 upper
