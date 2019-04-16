@@ -1,0 +1,12 @@
+
+box -100 -100 -100 200 100 200
+attribute bctype 5000
+
+import jsm_case02_mm_fixNacelle_2019_03_13.stp
+attribute bctype 4000
+scale 0.001 # from mm to meters
+
+subtract
+
+dump jsm-nac-box.egads
+
