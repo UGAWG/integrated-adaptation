@@ -1,0 +1,67 @@
+&project
+  project_rootname = 'jsm-nac-box01'
+/
+&special_parameters
+!  distance_from_file = 'jsm-nac-box01-distance.solb'
+/
+&flow_initialization
+  import_from = ''
+/
+&raw_grid
+  grid_format = 'aflr3' 
+  data_format = 'stream'
+/
+&force_moment_integ_properties
+area_reference = 1.1233
+x_moment_length = 0.5292
+y_moment_length = 2.3
+x_moment_center = 2.23757
+/
+&governing_equations
+  viscous_terms = 'inviscid'
+/
+ &reference_physical_properties
+    angle_of_attack = 10.47
+    mach_number = 0.172
+!    reynolds_number = 3.647e6 ! 1.93/0.5292
+!    temperature = 551.79
+!    temperature_units = "Rankine"
+/
+&nonlinear_solver_parameters
+  schedule_cfl       = 1.0 10.0
+!  schedule_cflturb   = 1.0  5.0
+/
+&code_run_control
+  steps = 6000
+  restart_write_freq = 500
+  stopping_tolerance = 1.0e-12
+  restart_read = 'off'
+/
+&global
+  boundary_animation_freq = -1
+  volume_animation_freq = -1
+/
+&boundary_output_variables
+  number_of_boundaries = -1 ! compute from following list
+  boundary_list        = '1-413'
+  mach                 = .true.
+  cp                   = .true.
+/
+&volume_output_variables
+ export_to='solb'
+ primitive_variables = .true.
+! turb1 = .true.
+ x = .false.
+ y = .false.
+ z = .false.
+/
+
+&sampling_parameters
+number_of_geometries = 1
+sampling_frequency(1) = -1
+label(1) = 'x0350'
+type_of_geometry(1) = 'plane'
+plane_center(1:3,1) = 3.5,0,0
+plane_normal(1:3,1) = 1,0,0
+/
+
