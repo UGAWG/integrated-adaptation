@@ -1,0 +1,10 @@
+
+udprim csm filename $swept.csm
+
+import axie-geom-v1-mm.stp
+attribute .tParams "1.0;0.01;15.0"
+scale 0.001 # from mm to meters
+
+subtract
+
+dump axie-swept.egads

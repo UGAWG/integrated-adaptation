@@ -1,0 +1,43 @@
+# swept.csm written by ocsmSave (v1.14)
+
+# Constant, Design, and Output Parameters:
+
+# Global Attributes:
+
+# Branches:
+set       l 32.92
+set       R 7
+set       xmin -0.3
+set       xclip0 0.1
+set       xmax 3
+set       xclip1 0.3
+set       dx (xmax-xmin)
+set       mach0 1.60
+set       mach1 (mach0-0.01)
+set       mach_angle0 (asin(1.0/mach0))
+set       mach_angle1 (asin(1.0/mach1))
+skbeg     0   0   0   1
+skend     0
+skbeg     (xmin*l)   0   0   1
+   skvar     xy   0.000000;0.000000;0.000000;5.000000;-7.000000;0.000000;7.000000;-7.000000;0.000000;2.000000;0.000000;0.000000;
+   skcon     X   1   -1  0
+   skcon     Y   1   -1  0
+   skcon     H   2   3  0
+   skcon     H   4   1  0
+   skcon     Y   2   -1  (-R*l)
+   skcon     X   2   -1  (R/tan(mach_angle0)*l)
+   skcon     X   3   -1  ((dx+R/tan(mach_angle1))*l)
+   skcon     X   4   -1  (dx*l)
+   linseg    ::x[2]   ::y[2]   0
+   linseg    ::x[3]   ::y[3]   0
+   linseg    ::x[4]   ::y[4]   0
+   linseg    ::x[1]   ::y[1]   0
+skend     0
+revolve   0   0   0   1   0   0   360
+cylinder (-1*l) 0 0 ((xmin+xclip0)*l) 0 0 R*l
+subtract
+cylinder ((xmax-0.1)*l) 0 0 ((xmax+xclip1)*l) 0 0 ((0.1+xclip1*tan(mach_angle1))*l)
+union
+box (-2*R*l) (-2*R*l) (-2*R*l) (4*R*l) (2*R*l) (4*R*l)
+subtract
+
