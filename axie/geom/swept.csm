@@ -9,7 +9,7 @@ set       l 32.92
 set       R 7
 set       xmin -0.3
 set       xclip0 0.1
-set       xmax 3
+set       xmax 4
 set       xclip1 0.3
 set       dx (xmax-xmin)
 set       mach0 1.60

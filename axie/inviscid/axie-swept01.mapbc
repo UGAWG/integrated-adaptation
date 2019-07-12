@@ -1,0 +1,9 @@
+8
+1 5000 inflow-swept
+2 6662 symm-y
+3 5000 farfield
+4 5000 inflow-normal
+5 5000 outflow-swept
+6 5000 outflow-normal
+7 3000 axie-lower
+8 3000 axie-upper
