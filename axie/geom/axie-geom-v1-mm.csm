@@ -1,0 +1,6 @@
+import axie-geom-v1-mm.stp
+attribute .tParams "1.0;0.01;15.0"
+
+scale 0.001
+
+dump axie-geom-v1-mm.ugrid
