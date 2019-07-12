@@ -1,0 +1,71 @@
+&project
+  project_rootname = 'axie-sweep01'
+/
+&flow_initialization
+  import_from = ''
+/
+&raw_grid
+  grid_format = 'aflr3' 
+  data_format = 'stream'
+/
+&force_moment_integ_properties
+area_reference = 1.0
+x_moment_length = 32.92
+/
+&governing_equations
+  viscous_terms = 'inviscid'
+/
+&inviscid_flux_method
+  freeze_limiter_iteration = 500
+  flux_limiter      = 'hvanleer'
+  kappa_umuscl      = 0
+/
+ &reference_physical_properties
+    angle_of_attack = 0
+    mach_number = 1.6
+/
+&nonlinear_solver_parameters
+  schedule_cfl       = 1.0 50.0
+/
+&code_run_control
+  steps = 1000
+  restart_write_freq = 100
+  stopping_tolerance = 1.0e-12
+  restart_read = 'off'
+/
+&global
+  boundary_animation_freq = -1
+  volume_animation_freq = -1
+/
+&boundary_output_variables
+  number_of_boundaries = -1 ! compute from following list
+  boundary_list        = '1-8'
+  mach                 = .true.
+  dp_pinf              = .true.
+/
+&volume_output_variables
+ export_to='solb'
+ primitive_variables = .true.
+ x = .false.
+ y = .false.
+ z = .false.
+/
+&sonic_boom
+y_ray( 1) =     0.000100
+z_ray( 1) =   -32.920000
+y_ray( 2) =     0.000100
+z_ray( 2) =   -98.760000
+y_ray( 3) =     0.000100
+z_ray( 3) =  -164.600000
+y_ray( 4) =    49.380000
+z_ray( 4) =   -85.528669
+y_ray( 5) =    85.528669
+z_ray( 5) =   -49.380000
+y_ray( 6) =    98.760000
+z_ray( 6) =    -0.000000
+y_ray( 7) =    85.528669
+z_ray( 7) =    49.380000
+y_ray( 8) =    49.380000
+z_ray( 8) =    85.528669
+nsignals = 8
+/
