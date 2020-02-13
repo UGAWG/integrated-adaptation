@@ -1,0 +1,35 @@
+# 2D NACA 0012 Airfoil validation case (w/slightly different outer boundary)
+# from https://turbmodels.larc.nasa.gov/naca0012_val.html
+#
+# Note: Uses ESP built-in NACA airfoil generator
+#
+# Note: The semi-circular/rentangular outer boundary not precisely the same as C-Grid
+
+despmtr   farfield_distance   500
+
+skbeg     farfield_distance   farfield_distance   0   0
+   skvar     xy  "500;  -500;   0;\
+                    0;  -500;   0;\
+                    0; -1500; 500;\
+                  500; -1500;   0;"
+   skcon     X   1  -1  farfield_distance
+   skcon     Y   1  -1  farfield_distance
+   skcon     H   1   2  0
+   skcon     L   1   2  farfield_distance
+   skcon     T   2  -1  0
+   skcon     R   2   3  farfield_distance
+   skcon     T   3  -1  0
+   skcon     H   3   4  0
+   skcon     V   4   1  0
+   linseg    ::x[2]   ::y[2]   ::z[2]
+   arc       ::x[3]   ::y[3]   ::z[3]   ::d[3]   xy
+   linseg    ::x[4]   ::y[4]   ::z[4]
+   linseg    ::x[1]   ::y[1]   ::z[1]
+skend
+
+udprim naca series 0012 sharpte 1
+extrude   0    0   1
+
+subtract
+
+dump twod_naca0012_airfoil.egads
