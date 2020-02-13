@@ -1,0 +1,54 @@
+&project
+  project_rootname = ''
+/
+&flow_initialiization
+  import_from = ''
+/
+&raw_grid
+  grid_format = 'aflr3'
+/
+&reference_physical_properties
+  mach_number       =  0.15
+  reynolds_number   =  6e+6
+  temperature       =  540
+  temperature_units = 'Rankine'
+/
+&code_run_control
+  steps              = 2500
+  restart_read       = 'off'
+  restart_write_freq = 10000
+  use_vector_intrinsics = T ! for Lake processors
+/
+&boundary_conditions
+    wall_temp_flag(1:8) = 8*T
+  wall_temperature(1:8) = 8*-1 ! adiabatic
+/
+&nonlinear_solver_parameters
+  schedule_iteration = 1  100
+  schedule_cfl       = 1   10
+  schedule_cflturb   = 1   10
+/
+&global
+  volume_animation_freq   = -1
+  boundary_animation_freq = -1
+/
+&volume_output_variables
+  export_to = 'solb'
+  x     = F
+  y     = F
+  z     = F
+  turb1 = T
+/
+&boundary_output_variables
+  number_of_boundaries = -1 ! compute from list
+  boundary_list        = '7'
+  y       = F
+  v       = F
+  mach    = T
+  cp      = T
+  turb1   = T
+  slen    = T
+  mu_t    = T
+  skinfr  = T
+  uwprime = T
+/

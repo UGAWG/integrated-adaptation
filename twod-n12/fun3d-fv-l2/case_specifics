@@ -1,0 +1,27 @@
+root_project 'twod_naca0012_airfoil'
+
+first_iteration  1
+last_iteration 100
+
+def iteration_steps
+  number_of_processors 40
+  steps_per_complexity = 20
+  step = [0,iteration/steps_per_complexity-1].max
+  complexity = 5e3*2**step
+  if ( 1 == iteration ) then
+    sh("cp #{project}.meshb Flow")
+    sh("ref translate #{project}.meshb Flow/#{project}.lb8.ugrid --extrude")
+  end		      
+  sh("cp #{project(1)}.mapbc Flow/#{project}.mapbc")
+  if ( 1 == iteration ) then
+    flo()
+  else
+    flo({"import_from" => "'#{project}-restart.solb'"})
+  end
+  expect_file("Flow/#{project}_volume.solb")
+  ref("ref loop "+
+      "#{project} #{project(@iteration+1)} "+
+      "#{complexity}",
+      "refine_out",
+      "#{project(@iteration+1)}.meshb")
+end

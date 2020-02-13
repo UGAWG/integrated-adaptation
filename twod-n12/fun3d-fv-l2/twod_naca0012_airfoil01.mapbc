@@ -1,0 +1,9 @@
+8
+1 5000 farfield
+2 5000 farfield
+3 5000 farfield
+4 5000 farfield
+5 4000 airfoil:upper
+6 4000 airfoil:lower
+7 6662 symmetry:y:min
+8 6662 symmetry:y:max
